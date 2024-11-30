@@ -3,8 +3,10 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-do this: git-changelog -B auto -Tio CHANGELOG.md -c angular -s build,deps,fix,feat,refactor
-read this: https://pawamoy.github.io/git-changelog/usage/#quick-usage
+How to update this file:
+- do this: git-changelog -B auto -Tio CHANGELOG.md -c angular -s build,deps,fix,feat,refactor
+- read this: https://pawamoy.github.io/git-changelog/usage/#quick-usage
+
 
 <!-- insertion marker -->
 ## [0.1.0](https://github.com/MrXinc/convert/releases/tag/0.1.0) - 2024-11-29
