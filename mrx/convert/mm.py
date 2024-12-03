@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import csv
 import inspect
@@ -8,13 +9,37 @@ from mako.template import Template
 this_module_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 
 
-def get_csv(feed, comment="#"):
+def get_strings(feed, comment="#"):
     """ read csv file, skipping any line that begins with a comment (default to '#') """
-    csv_data = []
+    s_data = []
+    is_open = False
     with open(feed, 'r') as fp:
-        for c in fp:
-            print(c)
-    return csv_data
+        for i, c in enumerate(fp):
+            #import pdb; pdb.set_trace()
+            has_space = False
+            if c.strip():
+                has_space = re.match(r'\s', c)
+                
+                # open prev node
+                if has_space and is_open is False and i > 0:
+                    is_open = True
+                    s_data[i-1]['e'] = False
+
+                # make node
+                m = {'t': c.strip(), 'e': True}
+                s_data.append(m)
+
+            # close node
+            if is_open and not has_space:
+                is_open = False
+                m = {'e': True}
+                s_data.append(m)
+
+        # close dangling node
+        if is_open:
+            m = {'e': True}
+            s_data.append(m)
+    return s_data
 
 
 def render_template(tmpl, csv_dict, do_print=False):
@@ -48,5 +73,5 @@ def txt2mm():
     import json
     args = sys.argv[1:]
     file = args[0] if len(args) > 0 else os.path.join(this_module_dir, "test.txt")
-    csv = get_csv(file)
+    csv = get_strings(file)
     print(json.dumps(csv, indent=4))
